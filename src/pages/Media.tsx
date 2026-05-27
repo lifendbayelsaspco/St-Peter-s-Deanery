@@ -22,6 +22,7 @@ const photoItems = [
 ];
 
 import { useEffect, useState } from 'react';
+import ImageViewer from '../components/ImageViewer';
 
 type PhotoItem = {
   src: string;
@@ -44,6 +45,8 @@ export default function Media() {
   const [manifest, setManifest] = useState<MediaManifest | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [viewerOpen, setViewerOpen] = useState(false);
+  const [viewerIndex, setViewerIndex] = useState(0);
 
   useEffect(() => {
     fetch('/media-manifest.json')
@@ -90,9 +93,19 @@ export default function Media() {
             </p>
           ) : (
             <div className="image-grid">
-              {manifest?.photos.map((photo) => (
+              {manifest?.photos.map((photo, i) => (
                   <figure key={photo.src} className="gallery-card">
-                    <img className="gallery-image" src={safeUrl(photo.src)} alt={photo.alt} />
+                    <img
+                      className="gallery-image"
+                      src={safeUrl(photo.src)}
+                      alt={photo.alt}
+                      loading="lazy"
+                      onClick={() => {
+                        setViewerIndex(i);
+                        setViewerOpen(true);
+                      }}
+                      style={{ cursor: 'pointer' }}
+                    />
                     <figcaption>2026 Synod Highlights</figcaption>
                   </figure>
                 ))}
@@ -117,15 +130,15 @@ export default function Media() {
           ) : (
             <div className="video-list">
               {manifest?.videos.map((video) => (
-                <article key={video.src} className="video-card">
-                  <h4>{video.title}</h4>
-                  <p className="media-caption">2026 Synod Highlights</p>
-                  <video controls className="video-player">
-                    <source src={safeUrl(video.src)} type="video/mp4" />
-                    Your browser does not support this video format.
-                  </video>
-                </article>
-              ))}
+                  <article key={video.src} className="video-card">
+                    <h4>{video.title}</h4>
+                    <p className="media-caption">2026 Synod Highlights</p>
+                    <video controls className="video-player" preload="none">
+                      <source src={safeUrl(video.src)} type="video/mp4" />
+                      Your browser does not support this video format.
+                    </video>
+                  </article>
+                ))}
             </div>
           )}
         </div>
@@ -153,14 +166,24 @@ export default function Media() {
           <div className="events-grid">
             <div className="events-photos">
               <h4>Photos</h4>
-              <div className="image-grid">
-                {manifest?.photos.map((p) => (
-                  <figure key={`evt-${p.src}`} className="gallery-card">
-                    <img className="gallery-image" src={safeUrl(p.src)} alt={p.alt} />
-                    <figcaption>2026 Synod Highlights</figcaption>
-                  </figure>
-                ))}
-              </div>
+                  <div className="image-grid">
+                    {manifest?.photos.map((p, i) => (
+                      <figure key={`evt-${p.src}`} className="gallery-card">
+                        <img
+                          className="gallery-image"
+                          src={safeUrl(p.src)}
+                          alt={p.alt}
+                          loading="lazy"
+                          onClick={() => {
+                            setViewerIndex(i);
+                            setViewerOpen(true);
+                          }}
+                          style={{ cursor: 'pointer' }}
+                        />
+                        <figcaption>2026 Synod Highlights</figcaption>
+                      </figure>
+                    ))}
+                  </div>
             </div>
 
             <div className="events-videos">
@@ -169,7 +192,7 @@ export default function Media() {
                 {manifest?.videos.map((v) => (
                   <article key={`evt-${v.src}`} className="video-card">
                     <h5>{v.title}</h5>
-                    <video controls className="video-player">
+                    <video controls className="video-player" preload="none">
                       <source src={safeUrl(v.src)} type="video/mp4" />
                       Your browser does not support this video format.
                     </video>
@@ -181,6 +204,14 @@ export default function Media() {
           </div>
         )}
       </section>
+      {viewerOpen && manifest && (
+        <ImageViewer
+          photos={manifest.photos.map((p) => ({ src: p.src, alt: p.alt }))}
+          startIndex={viewerIndex}
+          onClose={() => setViewerOpen(false)}
+        />
+      )}
     </div>
   );
 }
+
