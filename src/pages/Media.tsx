@@ -91,11 +91,11 @@ export default function Media() {
           ) : (
             <div className="image-grid">
               {manifest?.photos.map((photo) => (
-                <figure key={photo.src} className="gallery-card">
-                  <img className="gallery-image" src={safeUrl(photo.src)} alt={photo.alt} />
-                  <figcaption>{photo.caption}</figcaption>
-                </figure>
-              ))}
+                  <figure key={photo.src} className="gallery-card">
+                    <img className="gallery-image" src={safeUrl(photo.src)} alt={photo.alt} />
+                    <figcaption>2026 Synod Highlights</figcaption>
+                  </figure>
+                ))}
             </div>
           )}
         </div>
@@ -119,7 +119,7 @@ export default function Media() {
               {manifest?.videos.map((video) => (
                 <article key={video.src} className="video-card">
                   <h4>{video.title}</h4>
-                  <p>{video.description}</p>
+                  <p className="media-caption">2026 Synod Highlights</p>
                   <video controls className="video-player">
                     <source src={safeUrl(video.src)} type="video/mp4" />
                     Your browser does not support this video format.
@@ -138,10 +138,7 @@ export default function Media() {
           <li>Scripture teaching from Ephesians 2:8-9 and 4:7-13.</li>
           <li>Shared testimonies, fellowship, and community prayer.</li>
         </ul>
-        <p className="media-note">
-          Media data comes from <code>public/media-manifest.json</code>. Add or
-          update filenames in that file without changing the page code.
-        </p>
+        
       </section>
 
       <section className="section section-events">
@@ -160,7 +157,7 @@ export default function Media() {
                 {manifest?.photos.map((p) => (
                   <figure key={`evt-${p.src}`} className="gallery-card">
                     <img className="gallery-image" src={safeUrl(p.src)} alt={p.alt} />
-                    <figcaption>{p.caption}</figcaption>
+                    <figcaption>2026 Synod Highlights</figcaption>
                   </figure>
                 ))}
               </div>
@@ -176,7 +173,7 @@ export default function Media() {
                       <source src={safeUrl(v.src)} type="video/mp4" />
                       Your browser does not support this video format.
                     </video>
-                    <p>{v.description}</p>
+                    <p className="media-caption">2026 Synod Highlights</p>
                   </article>
                 ))}
               </div>
