@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { BrowserRouter, Link, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home';
 import Media from './pages/Media';
@@ -6,6 +7,9 @@ import Testimonies from './pages/Testimonies';
 import PrayerRequest from './pages/PrayerRequest';
 
 function App() {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const closeMenu = () => setMenuOpen(false);
+
   return (
     <BrowserRouter>
       <div className="page-shell">
@@ -13,16 +17,39 @@ function App() {
           <div className="brand">
             <p>St. Peter's Deanery Anglican Church</p>
           </div>
-          <nav className="page-nav">
-            <Link to="/">Home</Link>
-            <Link to="/media">Media</Link>
-            <Link to="/sermons">Sermons</Link>
-            <Link to="/testimonies">Testimonies</Link>
-            <Link to="/prayer">Prayer</Link>
+
+          <button
+            type="button"
+            className={`mobile-menu-button ${menuOpen ? 'open' : ''}`}
+            aria-label="Toggle navigation"
+            aria-expanded={menuOpen}
+            onClick={() => setMenuOpen((current) => !current)}
+          >
+            <span />
+            <span />
+            <span />
+          </button>
+
+          <nav className={`page-nav ${menuOpen ? 'open' : ''}`}>
+            <Link to="/" onClick={closeMenu}>
+              Home
+            </Link>
+            <Link to="/media" onClick={closeMenu}>
+              Media
+            </Link>
+            <Link to="/sermons" onClick={closeMenu}>
+              Sermons
+            </Link>
+            <Link to="/testimonies" onClick={closeMenu}>
+              Testimonies
+            </Link>
+            <Link to="/prayer" onClick={closeMenu}>
+              Prayer
+            </Link>
           </nav>
         </header>
 
-        <main className="page-main">
+        <main className="page-main" onClick={closeMenu}>
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/media" element={<Media />} />
