@@ -63,6 +63,8 @@ export default function Media() {
       });
   }, []);
 
+  const safeUrl = (path: string) => encodeURI(path);
+
   return (
     <div className="section section-media">
       <h2>Ninth Synod 2026 Media</h2>
@@ -90,7 +92,7 @@ export default function Media() {
             <div className="image-grid">
               {manifest?.photos.map((photo) => (
                 <figure key={photo.src} className="gallery-card">
-                  <img className="gallery-image" src={photo.src} alt={photo.alt} />
+                  <img className="gallery-image" src={safeUrl(photo.src)} alt={photo.alt} />
                   <figcaption>{photo.caption}</figcaption>
                 </figure>
               ))}
@@ -119,7 +121,7 @@ export default function Media() {
                   <h4>{video.title}</h4>
                   <p>{video.description}</p>
                   <video controls className="video-player">
-                    <source src={video.src} type="video/mp4" />
+                    <source src={safeUrl(video.src)} type="video/mp4" />
                     Your browser does not support this video format.
                   </video>
                 </article>
@@ -140,6 +142,47 @@ export default function Media() {
           Media data comes from <code>public/media-manifest.json</code>. Add or
           update filenames in that file without changing the page code.
         </p>
+      </section>
+
+      <section className="section section-events">
+        <h3>Events</h3>
+        <p>All uploaded event photos and videos are shown here.</p>
+
+        {loading ? (
+          <p>Loading events…</p>
+        ) : error ? (
+          <p className="media-note">Unable to load events from manifest.</p>
+        ) : (
+          <div className="events-grid">
+            <div className="events-photos">
+              <h4>Photos</h4>
+              <div className="image-grid">
+                {manifest?.photos.map((p) => (
+                  <figure key={`evt-${p.src}`} className="gallery-card">
+                    <img className="gallery-image" src={safeUrl(p.src)} alt={p.alt} />
+                    <figcaption>{p.caption}</figcaption>
+                  </figure>
+                ))}
+              </div>
+            </div>
+
+            <div className="events-videos">
+              <h4>Videos</h4>
+              <div className="video-list">
+                {manifest?.videos.map((v) => (
+                  <article key={`evt-${v.src}`} className="video-card">
+                    <h5>{v.title}</h5>
+                    <video controls className="video-player">
+                      <source src={safeUrl(v.src)} type="video/mp4" />
+                      Your browser does not support this video format.
+                    </video>
+                    <p>{v.description}</p>
+                  </article>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
       </section>
     </div>
   );

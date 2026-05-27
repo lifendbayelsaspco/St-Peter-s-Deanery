@@ -582,6 +582,33 @@ a {
   border: 0;
 }
 
+/* Events section */
+.section-events {
+  margin-top: 2rem;
+}
+
+.events-grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: 1.4fr 1fr;
+  align-items: start;
+}
+
+.events-photos h4,
+.events-videos h4 {
+  margin-top: 0;
+}
+
+.events-videos .video-card {
+  margin-bottom: 1rem;
+}
+
+@media (max-width: 920px) {
+  .events-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .section-sermon .sermon-grid {
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
 }
